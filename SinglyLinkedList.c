@@ -156,6 +156,41 @@ int insertFirst(headNode* h, int key) {
 
 /* 리스트를 검색하여, 입력받은 key보다 큰 값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(headNode* h, int key) {
+	listNode* node = (listNode*)malloc(sizeof(listNode));
+	listNode* p = h->first; 
+	listNode* trail;
+	node->key = key;
+	if (h->first != NULL) //first가 가리키는 노드가 있다면
+	{ 
+		if ((node->key) < (p->key)) //첫 노드의 key보다 입력받은 key가 더 작을때
+		{ 
+			node->link = p; // node를 첫 노드앞에 삽입한다
+			h->first = node;
+		}
+		else 
+		{ //node가 노드들 사이에 끼거나 맨 마지막에 삽입 될 때
+			while ((node->key >= p->key)&&p->link!=NULL) {
+				trail = p;
+				p = p->link;
+			}
+			if (node->key<p->key) { //node의 key가 p의 key보다 작을 때 
+				trail->link = node;
+				node->link = p;
+			}
+			else { // node의 key가 p의 key보다 작지도 않은데 반복문을 빠져 나온 경우,즉 p->link=NULL이라서 빠져 나온 것이다. 맨 마지막에 삽입해준다
+				p->link = node;
+				node->link = NULL;
+			}
+			
+		}
+	
+	}
+	else {// first가 가리키는 노드가 없다면 그냥 삽입한다
+		node->link = NULL;
+		h->first = node;
+
+	}
+	return 0;
 
 }
 
@@ -206,7 +241,36 @@ int deleteFirst(headNode* h){
  * list에서 key에 대한 노드 삭제
  */
 int deleteNode(headNode* h, int key) {
-	
+	listNode* p = h->first;
+	listNode* trail;// p가 가리키는 노드의 선행 노드를 가리킴
+	if (h->first) { // first가 가리키는 노드가 있을때
+		if(p->key==key){ // 첫 노드부터 key값이 일치할 경우
+			h->first = p->link;
+			free(p);
+		}
+		else { //첫 노드가 key값과 일치하지 않을 경우
+
+			while (p->key != key && p->link != NULL) {
+				trail = p;
+				p = p->link;
+			}
+			if (p->key==key) { //p가 가리키는 값이 key와 같은경우
+				trail->link = p->link;
+				free(p);
+			}
+			else //key를 찾지 못했을때 즉 p->link는 NULL이면서 p->key가 key가 아닐경우
+			{
+				printf("입력하신 값을 찾을 수 없습니다\n");
+			}
+			
+		}
+	}
+	else
+	{
+		printf("삭제할 노드가 없습니다\n");
+	}
+	return 0;
+
 
 }
 

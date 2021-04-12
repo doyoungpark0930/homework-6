@@ -305,6 +305,25 @@ int deleteLast(headNode* h) {
  * 리스트의 링크를 역순으로 재 배치
  */
 int invertList(headNode* h) { 
+	listNode* trail, *middle,*lead; //역순 배치할 때 다음 노드,전 노드,현재 노드에 대한 정보를 다 알아야하므로 3개의 포인터가 필요하다
+	trail = NULL;
+	middle = NULL;
+	lead = h->first;
+	
+	if (lead != NULL) { //노드가 하나이상 있다면
+		while (lead) {
+			trail = middle;
+			middle = lead;
+			lead = lead->link;
+			middle->link = trail;
+		}
+		h->first = middle; // 반복문 빠져나올때 middle은 마지막 노드를 가리키고 있으므로 first가 마지막 노드를 가리키게 한다
+	}
+	else
+	{
+		printf("노드가 없습니다\n");
+	}
+	return 0;
 
 }
 
